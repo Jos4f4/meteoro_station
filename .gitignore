@@ -24,7 +24,7 @@ htmlcov/
 .tox/
 
 # ==========================================
-# IDEs e Ferramentas (VS Code, Thonny, Eclipse)
+# IDEs and Tools (VS Code, Thonny, Eclipse)
 # ==========================================
 .vscode/*
 !.vscode/settings.json
@@ -34,14 +34,14 @@ htmlcov/
 .thonny/
 
 # ==========================================
-# Arquivos de Sistema Operacional
+# Files of Operational System
 # ==========================================
 .DS_Store
 Thumbs.db
 ehthumbs.db
 
 # ==========================================
-# Dados Temporários e Logs do Projeto
+# Temporary Data and Project Logs
 # ==========================================
 *.log
 *.csv
