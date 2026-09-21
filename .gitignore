@@ -1,0 +1,47 @@
+# ==========================================
+# Caches e Arquivos Compilados do Python
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.mpy
+
+# ==========================================
+# Ambientes Virtuais Locais
+# ==========================================
+.venv/
+venv/
+env/
+ENV/
+
+# ==========================================
+# Testes Automatizados (Pytest)
+# ==========================================
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# ==========================================
+# IDEs e Ferramentas (VS Code, Thonny, Eclipse)
+# ==========================================
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
+.thonny/
+
+# ==========================================
+# Arquivos de Sistema Operacional
+# ==========================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# ==========================================
+# Dados Temporários e Logs do Projeto
+# ==========================================
+*.log
+*.csv
