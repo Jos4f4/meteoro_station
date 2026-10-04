@@ -1,6 +1,7 @@
 """
 Mock gas sensor (e.g., MQ-135) to simulate heating states and relative indices.
 """
+
 import random
 import time
 
@@ -16,7 +17,7 @@ class MockGasSensor:
     def __init__(self, heating_time_seconds: int = 10):
         """
         Initializes the mock gas sensor.
-        
+
         Args:
             heating_time_seconds (int): Time required for the sensor to heat up.
         """
@@ -27,29 +28,26 @@ class MockGasSensor:
     def get_state(self) -> str:
         """
         Determines the current operational state of the sensor.
-        
+
         Returns:
             str: The current state (heating or valid).
         """
 
         if (time.time() - self.start_time) < self.heating_time:
             return SensorState.HEATING
-        
+
         return SensorState.VALID
 
     def read(self) -> dict:
         """
         Simulates reading the air quality relative index.
-        
+
         Returns:
             dict: A dictionary containing the air quality index and sensor state.
         """
-        
+
         state = self.get_state()
-        reading = {
-            "state": state,
-            "air_quality_index": None
-        }
+        reading = {"state": state, "air_quality_index": None}
 
         if state == SensorState.VALID:
             # Emitting a relative index as per domain requirement RD04

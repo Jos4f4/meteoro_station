@@ -51,17 +51,16 @@ class SensorEvaluator:
         Returns:
             str: The classification category (normal, attention, or critical).
         """
-        
+
         if sensor_type not in self.limits:
             return ReadingCategory.NORMAL
 
         sensor_limits = self.limits[sensor_type]
-        
-        if value >= sensor_limits.get("critical", float('inf')):
+
+        if value >= sensor_limits.get("critical", float("inf")):
             return ReadingCategory.CRITICAL
-        
-        if value >= sensor_limits.get("attention", float('inf')):
+
+        if value >= sensor_limits.get("attention", float("inf")):
             return ReadingCategory.ATTENTION
 
         return ReadingCategory.NORMAL
-    
