@@ -21,7 +21,6 @@ class MockGasSensor:
         Args:
             heating_time_seconds (int): Time required for the sensor to heat up.
         """
-
         self.start_time = time.time()
         self.heating_time = heating_time_seconds
 
@@ -32,7 +31,6 @@ class MockGasSensor:
         Returns:
             str: The current state (heating or valid).
         """
-
         if (time.time() - self.start_time) < self.heating_time:
             return SensorState.HEATING
 
@@ -45,12 +43,10 @@ class MockGasSensor:
         Returns:
             dict: A dictionary containing the air quality index and sensor state.
         """
-
         state = self.get_state()
         reading = {"state": state, "air_quality_index": None}
 
         if state == SensorState.VALID:
-            # Emitting a relative index as per domain requirement RD04
             reading["air_quality_index"] = round(random.uniform(50.0, 150.0), 1)
 
         return reading

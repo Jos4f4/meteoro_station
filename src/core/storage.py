@@ -17,7 +17,6 @@ class CircularBuffer:
             capacity (int): Maximum number of readings to store.
             Default 144 (e.g., 24h of 10-minute intervals).
         """
-
         self.capacity = capacity
         self.buffer = []
         self.index = 0
@@ -29,7 +28,6 @@ class CircularBuffer:
         Args:
             reading (dict): The sensor data dictionary to store.
         """
-
         if len(self.buffer) < self.capacity:
             self.buffer.append(reading)
         else:
@@ -43,11 +41,9 @@ class CircularBuffer:
         Returns:
             dict: The latest reading, or an empty dictionary if the buffer is empty.
         """
-
         if not self.buffer:
             return {}
 
-        # If buffer is full, the latest item is just before the current index
         latest_index = (self.index - 1) if len(self.buffer) == self.capacity else -1
 
         return self.buffer[latest_index]
@@ -59,7 +55,6 @@ class CircularBuffer:
         Returns:
             list: A list of reading dictionaries.
         """
-
         if len(self.buffer) < self.capacity:
             return self.buffer
 

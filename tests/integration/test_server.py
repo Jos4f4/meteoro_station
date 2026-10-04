@@ -14,7 +14,6 @@ def mock_buffer():
     """
     Provides a populated buffer for API testing.
     """
-
     buffer = CircularBuffer(capacity=5)
     buffer.add_reading(
         {
@@ -35,7 +34,6 @@ def test_client(mock_buffer):
     """
     Provides the Microdot test client with the injected buffer.
     """
-
     app = init_app(mock_buffer)
 
     return TestClient(app)
@@ -46,7 +44,6 @@ async def test_serve_index_returns_html(test_client):
     """
     Ensures that the root route successfully returns the dashboard HTML.
     """
-
     response = await test_client.get("/")
 
     assert response.status_code == 200, f"Failure: {response.body}"
@@ -59,7 +56,6 @@ async def test_serve_static_js(test_client):
     """
     Ensures that the static route correctly returns the frontend script.
     """
-
     response = await test_client.get("/static/app.js")
 
     assert response.status_code == 200, f"Failure: {response.body}"

@@ -37,6 +37,5 @@ async def test_main_schedules_all_tasks(mock_gather):
     args, _ = mock_gather.call_args
     assert len(args) == 3
 
-    # Limpeza: cancela as tarefas pendentes para eliminar os alertas do console
     for task in args:
         task.cancel()

@@ -11,7 +11,6 @@ from microdot import Microdot, Response
 app = Microdot()
 _storage_buffer = None
 
-# Resolve the absolute path for the static directory (cross-platform)
 BASE_DIR = Path(__file__).parent
 STATIC_DIR = BASE_DIR / "static"
 
@@ -26,7 +25,6 @@ def init_app(buffer_instance):
     Returns:
         Microdot: The configured application instance.
     """
-
     global _storage_buffer
     _storage_buffer = buffer_instance
 
@@ -39,7 +37,6 @@ async def get_latest_readings(request):
     API endpoint that returns the most recent
     environmental readings in JSON format.
     """
-
     if not _storage_buffer:
         return Response(
             body=json.dumps({"error": "Buffer not initialized"}),
@@ -64,7 +61,6 @@ async def serve_index(request):
     """
     Serves the main dashboard HTML file.
     """
-
     try:
         file_path = STATIC_DIR / "index.html"
 
@@ -87,7 +83,6 @@ async def serve_static(request, filename):
     """
     Serves static CSS and JS files based on the requested filename.
     """
-
     content_types = {"css": "text/css", "js": "application/javascript"}
     ext = filename.split(".")[-1]
     content_type = content_types.get(ext, "text/plain")
@@ -112,16 +107,44 @@ async def serve_static(request, filename):
 @app.route("/api/exportar.csv")
 async def export_csv(request):
     """
-    Serves the historical CSV file for download.
+    Serves the historical CSV file for download, with fallback to RAM buffer.
     """
     try:
-        file_path = BASE_DIR.parent.parent / "history.csv"
+        # Tenta ler o ficheiro físico primeiro se ele existir na raiz
+        file_path = BASE_DIR.parent / "history.csv"
+        if file_path.exists():
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read()
+            return Response(
+                body=content,
+                status_code=200,
+                headers={
+                    "Content-Type": "text/csv",
+                    "Content-Disposition": 'attachment; filename="historico_estacao.csv"',
+                },
+            )
 
-        with open(file_path, "r", encoding="utf-8") as f:
-            content = f.read()
+        # Se não existir, gera o CSV a partir dos dados em RAM do buffer
+        csv_content = "timestamp,temperatura,umidade,pressao,qualidade_ar\n"
+        if _storage_buffer:
+            for item in _storage_buffer.get_all():
+                # Tratamento seguro para extração dos dicionários internos
+                temp = item.get("temperature")
+                temp_val = temp.get("value") if isinstance(temp, dict) else temp
+
+                hum = item.get("humidity")
+                hum_val = hum.get("value") if isinstance(hum, dict) else hum
+
+                pres = item.get("pressure")
+                pres_val = pres.get("value") if isinstance(pres, dict) else pres
+
+                aqi = item.get("air_quality_index")
+                aqi_val = aqi.get("value") if isinstance(aqi, dict) else aqi
+
+                csv_content += f"{item.get('timestamp')},{temp_val},{hum_val},{pres_val},{aqi_val}\n"
 
         return Response(
-            body=content,
+            body=csv_content,
             status_code=200,
             headers={
                 "Content-Type": "text/csv",
@@ -129,4 +152,4 @@ async def export_csv(request):
             },
         )
     except Exception as e:
-        return Response(body=f"Arquivo não encontrado: {e}", status_code=404)
+        return Response(body=f"Erro interno ao gerar CSV: {e}", status_code=500)

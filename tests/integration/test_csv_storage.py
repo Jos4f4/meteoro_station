@@ -16,7 +16,7 @@ def temp_csv_file():
     """
     filename = "test_history.csv"
     yield filename
-    # Cleanup after test
+    
     if os.path.exists(filename):
         os.remove(filename)
 
