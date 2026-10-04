@@ -4,7 +4,7 @@ Sistema embebido de monitorização meteorológica desenvolvido em \*\*MicroPyth
 
 ---
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 meteoro\_station/
 
@@ -31,6 +31,8 @@ meteoro\_station/
 ├── venv/                  # Ambiente virtual Python
 
 └── README.md
+
+---
 
 ## Guia de Instalação e Execução
 
