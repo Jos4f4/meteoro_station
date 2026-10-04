@@ -15,7 +15,6 @@ class MockBME280:
         """
         Initializes the mock sensor with default simulated states.
         """
-
         self.state = "valid"
         self.last_read_time = time.time()
 
@@ -26,10 +25,8 @@ class MockBME280:
         Returns:
             dict: A dictionary containing temperature, humidity, and pressure.
         """
-
-        # Simulating random environmental variations
         return {
-            "temperature": round(random.uniform(25.0, 38.0), 1),  # °C
-            "humidity": round(random.uniform(60.0, 95.0), 1),  # % UR
-            "pressure": round(random.uniform(1000.0, 1020.0), 1),  # hPa
+            "temperature": round(random.uniform(25.0, 38.0), 1),
+            "humidity": round(random.uniform(60.0, 95.0), 1),
+            "pressure": round(random.uniform(1000.0, 1020.0), 1),
         }

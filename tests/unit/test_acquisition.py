@@ -17,17 +17,14 @@ async def test_acquisition_loop_integrates_data():
     """
     Test if the manager reads from sensors and populates the buffer.
     """
-
     buffer = CircularBuffer(capacity=5)
     bme = MockBME280()
     gas = MockGasSensor(heating_time_seconds=0)  # No heating time for fast test
 
     manager = AcquisitionManager(bme, gas, buffer, interval_sec=0.1)
 
-    # Run the loop briefly using asyncio.wait_for
     task = asyncio.create_task(manager.run())
 
-    # Allow the loop to execute 2 cycles
     await asyncio.sleep(0.25)
     manager.stop()
     await task

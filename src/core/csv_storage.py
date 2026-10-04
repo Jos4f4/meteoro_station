@@ -24,7 +24,6 @@ class CSVManager:
         try:
             os.stat(self.filepath)
         except OSError:
-            # File does not exist, create it and write the header
             with open(self.filepath, "w", encoding="utf-8") as f:
                 f.write(
                     "timestamp,temperature,humidity,pressure,air_quality_index,gas_state\n"

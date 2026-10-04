@@ -22,15 +22,11 @@ def setup_ap(ssid: str = "Meteoro_Station", password: str = "fametro2026") -> bo
         bool: True if AP is active and configured, False otherwise.
     """
     if network is None:
-        print("Módulo 'network' não encontrado. Rodando em modo de simulação.")
         return False
 
     ap = network.WLAN(network.AP_IF)
     ap.active(True)
     ap.config(essid=ssid, password=password)
-
-    print(f"Modo AP inicializado: {ssid}")
-    print(f"Configuração de rede: {ap.ifconfig()}")
 
     return ap.active()
 

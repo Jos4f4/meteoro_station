@@ -7,11 +7,11 @@ import asyncio
 
 try:
     from machine import WDT
-
 except ImportError:
     WDT = None
 
 from src.core.acquisition import AcquisitionManager
+from src.core.csv_storage import CSVManager
 from src.core.storage import CircularBuffer
 from src.sensors.mock_gas_sensor import MockGasSensor
 from src.sensors.mock_sensors import MockBME280
@@ -35,20 +35,24 @@ async def main():
     Initializes components and runs the concurrent system tasks.
     """
     buffer = CircularBuffer(capacity=144)
+    csv_manager = CSVManager("history.csv")
 
     bme_sensor = MockBME280()
     gas_sensor = MockGasSensor(heating_time_seconds=10)
 
-    acquisition = AcquisitionManager(bme_sensor, gas_sensor, buffer, interval_sec=10)
+    acquisition = AcquisitionManager(
+        bme_sensor, gas_sensor, buffer, csv_manager, interval_sec=10
+    )
     app = init_app(buffer)
 
-    # Watchdog configurado para 30000ms (30 segundos) conforme RF18
     wdt = WDT(timeout=30000) if WDT else None
 
     tasks = [
         asyncio.create_task(acquisition.run()),
         asyncio.create_task(watchdog_task(wdt)),
-        asyncio.create_task(app.start_server(port=80, debug=False)),
+        asyncio.create_task(
+            app.start_server(port=80, debug=False)
+        ), 
     ]
 
     await asyncio.gather(*tasks)
@@ -57,6 +61,5 @@ async def main():
 if __name__ == "__main__":
     try:
         asyncio.run(main())
-
     except KeyboardInterrupt:
         print("Sistema parado manualmente.")

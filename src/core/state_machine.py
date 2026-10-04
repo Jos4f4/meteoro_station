@@ -37,7 +37,6 @@ class SensorEvaluator:
         Args:
             limits (dict): Configuration dictionary containing thresholds.
         """
-
         self.limits = limits
 
     def evaluate_reading(self, value: float, sensor_type: str) -> str:
@@ -51,7 +50,6 @@ class SensorEvaluator:
         Returns:
             str: The classification category (normal, attention, or critical).
         """
-
         if sensor_type not in self.limits:
             return ReadingCategory.NORMAL
 
