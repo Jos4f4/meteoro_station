@@ -1,12 +1,10 @@
-\# Estação Meteorológica IoT (Meteoro Station)
+# Estação Meteorológica IoT (Meteoro Station)
 
 Sistema embebido de monitorização meteorológica desenvolvido em \*\*MicroPython\*\* para o microcontrolador \*\*ESP32\*\*, com arquitetura assíncrona, persistência em buffer circular (RAM) e ficheiros físicos (CSV), além de uma interface web leve servida através do framework \*\*Microdot\*\*.
 
-\---
+---
 
-\## 📁 Estrutura do Projeto
-
-\```text
+## 📁 Estrutura do Projeto
 
 meteoro\_station/
 
@@ -34,11 +32,11 @@ meteoro\_station/
 
 └── README.md
 
-- Guia de Instalação e Execução
+## Guia de Instalação e Execução
 
 Siga os passos abaixo para configurar o ambiente de desenvolvimento, instalar as dependências, executar os testes e iniciar o projeto.
 
-1. Criar e Ativar o Ambiente Virtual (venv)
+### Criar e Ativar o Ambiente Virtual (venv)
 
 Abra o terminal na raiz do projeto e crie o ambiente virtual:
 
@@ -46,7 +44,7 @@ Bash
 
 python -m venv venv
 
-Ative o ambiente virtual conforme o seu sistema operativo:
+### Ative o ambiente virtual conforme o seu sistema operativo:
 
 Windows (PowerShell):
 
@@ -66,7 +64,7 @@ Bash
 
 source venv/bin/activate
 
-1. Instalar as Dependências
+### Instalar as Dependências
 
 Com o ambiente virtual ativo, instale as bibliotecas necessárias para o funcionamento do servidor e da suite de testes:
 
@@ -76,7 +74,7 @@ pip install microdot pytest pytest-asyncio
 
 pip install -r requirements.txt
 
-1. Executar os Testes Automatizados
+### Executar os Testes Automatizados
 
 O projeto possui uma suite completa de testes unitários, de integração e de aceitação gerida pelo pytest. Para validar todos os módulos, execute:
 
@@ -84,7 +82,7 @@ Bash
 
 python -m pytest
 
-1. Executar o Projeto
+### Executar o Projeto
 
 O sistema opera nativamente na porta 80 para o ambiente final no ESP32. Para iniciar o servidor e simular a recolha de dados dos sensores:
 
