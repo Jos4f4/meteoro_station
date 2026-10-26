@@ -1,101 +1,79 @@
-# Estação Meteorológica IoT (Meteoro Station)
+# ESP32 Meteorological Station (MicroPython & Microdot)
 
-Sistema embebido de monitorização meteorológica desenvolvido em \*\*MicroPython\*\* para o microcontrolador \*\*ESP32\*\*, com arquitetura assíncrona, persistência em buffer circular (RAM) e ficheiros físicos (CSV), além de uma interface web leve servida através do framework \*\*Microdot\*\*.
-
----
-
-## Estrutura do Projeto
-
-meteoro\_station/
-
-├── src/
-
-│   ├── core/              # Módulos centrais (aquisição, buffer, máquina de estados, CSV)
-
-│   ├── sensors/           # Sensores virtuais e reais (BME280, MQ-135)
-
-│   ├── web/               # Servidor Microdot e interface estática (HTML/CSS/JS)
-
-│   ├── boot.py            # Script de inicialização (Modo AP/Rede)
-
-│   └── main.py            # Ponto de entrada e orquestrador assíncrono
-
-├── tests/
-
-│   ├── acceptance/        # Testes de aceitação (Endpoints e rotas HTTP)
-
-│   ├── integration/       # Testes de integração (Aquisição e armazenamento)
-
-│   └── unit/              # Testes unitários (Buffer, avaliadores, sensores)
-
-├── venv/                  # Ambiente virtual Python
-
-└── README.md
+A complete, production-grade meteorological station powered by an **ESP32 (Wemos D1 R32)**, running **MicroPython**, featuring a real-time web dashboard, local CSV data logging, and concurrent sensor acquisition via `asyncio`.
 
 ---
 
-## Guia de Instalação e Execução
+## 🛠️ Hardware Requirements
 
-Siga os passos abaixo para configurar o ambiente de desenvolvimento, instalar as dependências, executar os testes e iniciar o projeto.
+*   **Microcontroller:** ESP32 (Wemos D1 R32)
+*   **Environmental Sensor:** BME280 (Temperature, Humidity, Pressure via I2C)
+*   **Air Quality Sensor:** MQ-2 Gas Sensor (Analog Interface)
+*   **Peripherals:** Breadboard, jumper wires (Dupont), USB cable, and external power source (optional).
 
-### Criar e Ativar o Ambiente Virtual (venv)
+---
 
-Abra o terminal na raiz do projeto e crie o ambiente virtual:
+## ⚙️ Firmware & Tools Setup
 
-Bash
+1.  **Download and Install Thonny IDE:** Download the latest version of [Thonny IDE](https://thonny.org/) for your operating system.
+2.  **Flash MicroPython:**
+    *   Connect your ESP32 to your PC via USB.
+    *   In Thonny, go to **Tools > Options > Interpreter**.
+    *   Select **MicroPython (ESP32)** as the interpreter and choose the correct COM port.
+    *   Click on **Install or update MicroPython**, select your ESP32 model, and flash firmware version **v1.29.0** (or stable equivalent).
 
-python -m venv venv
+---
 
-### Ative o ambiente virtual conforme o seu sistema operativo:
+## 📂 Project Structure
 
-Windows (PowerShell):
+Upload the following file structure directly to your ESP32 device using Thonny:
 
-PowerShell
+```text
+/
+├── boot.py               # Disables STA interface and initializes AP mode
+├── station.py            # Main entry point with native async HTTP server
+├── history.csv           # Local data log (auto-generated)
+└── src/
+    ├── core/
+    │   ├── acquisition.py    # Background sensor polling loop
+    │   ├── csv_storage.py    # CSV writer and log manager
+    │   └── storage.py        # Circular buffer implementation
+    ├── sensors/
+    │   ├── factory.py        # Sensor loader factories
+    │   ├── mock_gas_sensor.py# Mock fallback for gas sensor
+    │   └── mock_sensors.py   # Mock fallback for environmental sensor
+    └── web/
+        └── static/
+            ├── index.html    # Dashboard web page
+            ├── style.css     # Dashboard styling
+            └── app.js        # Frontend async polling script
+```
 
-.\venv\Scripts\Activate.ps1
+---
 
-Windows (CMD):
+## 🚀 Flashing and Running via Thonny IDE
 
-DOS
+1.  **Open the Project Files:**
+    *   Open Thonny and use the file browser panel to view your local workspace containing the project files.
+2.  **Upload Files to the ESP32:**
+    *   Right-click each folder and file (`boot.py`, `station.py`, and the `src/` directory) and select **Upload to /**.
+    *   Ensure the file structure on the ESP32 matches the local project layout precisely.
+3.  **Execute the Station:**
+    *   Press the physical **Reset (EN)** button on your Wemos D1 R32 board to ensure a clean boot (AP mode initialization).
+    *   Open the Thonny Shell window and run the main entry point:
+        ```python
+        import station
+        import asyncio
+        asyncio.run(station.main())
+        ```
+    *   You should see the confirmation message: `Native HTTP server with asset and API support active on port 80...`.
 
-venv\Scripts\activate.bat
+---
 
-Linux / macOS:
+## 📱 Accessing the Dashboard
 
-Bash
-
-source venv/bin/activate
-
-### Instalar as Dependências
-
-Com o ambiente virtual ativo, instale as bibliotecas necessárias para o funcionamento do servidor e da suite de testes:
-
-Bash
-
-pip install microdot pytest pytest-asyncio
-
-pip install -r requirements.txt
-
-### Executar os Testes Automatizados
-
-O projeto possui uma suite completa de testes unitários, de integração e de aceitação gerida pelo pytest. Para validar todos os módulos, execute:
-
-Bash
-
-python -m pytest
-
-### Executar o Projeto
-
-O sistema opera nativamente na porta 80 para o ambiente final no ESP32. Para iniciar o servidor e simular a recolha de dados dos sensores:
-
-Bash
-
-python -m src.main
-
-Após iniciar o servidor, aceda através do seu navegador:
-
-Painel Web: http://localhost (ou o IP correspondente no ESP32)
-
-Exportação CSV: http://localhost/api/exportar.csv
-
-Para interromper a execução do servidor no terminal, prima Ctrl + C.
+1.  On your smartphone or computer, **disable mobile data (4G/5G)**.
+2.  Connect to the local Wi-Fi network generated by the ESP32: **`Meteoro_Station`**.
+3.  Open any web browser and navigate to:
+    **`http://192.168.4.1`**
+4.  The real-time meteorological dashboard will load, displaying live metrics for Temperature, Humidity, Pressure, and Air Quality, alongside a download link for historical CSV records.
