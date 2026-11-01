@@ -3,10 +3,11 @@ Main entry point for the Meteoro Station.
 Fully integrated native HTTP server supporting static assets, API, and CSV export.
 """
 
-import gc
 import asyncio
-import usocket as socket
+import gc
 import json
+
+import usocket as socket
 
 from src.core.acquisition import AcquisitionManager
 from src.core.csv_storage import CSVManager
@@ -33,7 +34,7 @@ async def web_server_task(buffer, csv_manager):
             await asyncio.sleep(0.05)
             
             try:
-                conn, client_addr = s.accept()
+                conn, client_addr = s.accept()  # noqa: RUF059
             except OSError:
                 continue 
             
@@ -52,10 +53,10 @@ async def web_server_task(buffer, csv_manager):
             # 1. Main Page (HTML)
             if path == '/' or path == '/index.html':
                 try:
-                    with open('src/web/static/index.html', 'r', encoding='utf-8') as f:
+                    with open('src/web/static/index.html', 'r', encoding='utf-8') as f:  # noqa: ASYNC230
                         body = f.read()
                     content_type = 'text/html'
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001
                     body = f"Error reading index.html: {e}"
             
             # 2. Static Files (app.js, style.css)
@@ -69,9 +70,9 @@ async def web_server_task(buffer, csv_manager):
                 }
                 content_type = content_types.get(ext, 'text/plain')
                 try:
-                    with open(f'src/web/static/{filename}', 'r', encoding='utf-8') as f:
+                    with open(f'src/web/static/{filename}', 'r', encoding='utf-8') as f:  # noqa: ASYNC230
                         body = f.read()
-                except Exception:
+                except Exception:  # noqa: BLE001
                     body = "Static file not found"
             
             # 3. API Endpoint (Feeds sensor blocks)
@@ -90,10 +91,10 @@ async def web_server_task(buffer, csv_manager):
             # 4. CSV History Download Endpoint
             elif path in ['/api/exportar.csv', '/exportar.csv', '/history.csv']:
                 try:
-                    with open('history.csv', 'r', encoding='utf-8') as f:
+                    with open('history.csv', 'r', encoding='utf-8') as f:  # noqa: ASYNC230
                         body = f.read()
                     content_type = 'text/csv'
-                except Exception:
+                except Exception:  # noqa: BLE001
                     body = "timestamp,temperature,humidity,pressure,air_quality_index\n"
                     content_type = 'text/csv'
                     
@@ -112,7 +113,7 @@ async def web_server_task(buffer, csv_manager):
             conn.send(response.encode('utf-8'))
             conn.close()
             
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             print("Error in web server:", e)
 
 async def main():

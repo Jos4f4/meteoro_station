@@ -63,14 +63,14 @@ async def serve_index(request):
     """
     file_path = f"{STATIC_DIR}/index.html"
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, "r", encoding="utf-8") as f:  # noqa: ASYNC230
             content = f.read()
 
         return Response(
             body=content, status_code=200, headers={"Content-Type": "text/html"}
         )
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return Response(
             body=f"Error reading index.html: {e} | Path attempted: {file_path}",
             status_code=404,
@@ -88,14 +88,14 @@ async def serve_static(request, filename):
 
     file_path = f"{STATIC_DIR}/{filename}"
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, "r", encoding="utf-8") as f:  # noqa: ASYNC230
             content = f.read()
 
         return Response(
             body=content, status_code=200, headers={"Content-Type": content_type}
         )
 
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return Response(
             body=f"Error reading {filename}: {e} | Path attempted: {file_path}",
             status_code=404,
@@ -109,7 +109,7 @@ async def export_csv(request):
     """
     try:
         # Attempts to read the physical file directly from the root
-        with open("history.csv", "r", encoding="utf-8") as f:
+        with open("history.csv", "r", encoding="utf-8") as f:  # noqa: ASYNC230
             content = f.read()
         return Response(
             body=content,
@@ -147,5 +147,5 @@ async def export_csv(request):
                 "Content-Disposition": 'attachment; filename="historico_estacao.csv"',
             },
         )
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return Response(body=f"Internal error generating CSV: {e}", status_code=500)

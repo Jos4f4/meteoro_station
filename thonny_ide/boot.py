@@ -1,8 +1,9 @@
 """
 Boot file for the Meteorological Station.
 """
-import network
 import time
+
+import network
 
 sta = network.WLAN(network.STA_IF)
 sta.active(False)

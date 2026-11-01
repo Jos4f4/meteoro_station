@@ -8,7 +8,7 @@ import time
 
 import bme280
 import dht
-from machine import ADC, SoftI2C, Pin
+from machine import ADC, Pin, SoftI2C
 
 from src.sensors.mock_gas_sensor import MockGasSensor
 from src.sensors.mock_sensors import MockBME280
@@ -73,7 +73,7 @@ class RealDHT11Adapter:
                 "pressure": None,
             }
         
-        except Exception:
+        except Exception:  # noqa: BLE001
             return {"temperature": None, "humidity": None, "pressure": None}
 
 
@@ -129,7 +129,7 @@ class RealDS3231Adapter:
             data = self.i2c.readfrom_mem(self.addr, 0, 7)
             return data
         
-        except Exception:
+        except Exception:  # noqa: BLE001
             return time.time()
 
 
@@ -147,7 +147,7 @@ def load_bme_sensor():
         if 0x76 in devices or 0x77 in devices:
             return RealBME280Adapter(i2c)
 
-    except Exception:
+    except Exception:  # noqa: BLE001, S110
         pass
 
     return MockBME280()
@@ -164,7 +164,7 @@ def load_gas_sensor():
     try:
         return RealMQ2Adapter(34)
 
-    except Exception:
+    except Exception:  # noqa: BLE001, S110
         pass
 
     return MockGasSensor(heating_time_seconds=10)
