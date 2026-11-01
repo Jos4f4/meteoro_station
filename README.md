@@ -34,6 +34,8 @@ Upload the following file structure directly to your ESP32 device using Thonny:
 ├── station.py            # Main entry point with native async HTTP server
 ├── history.csv           # Local data log (auto-generated)
 └── src/
+    |── image/
+    |   ├── fametro_logo.jpg
     ├── core/
     │   ├── acquisition.py    # Background sensor polling loop
     │   ├── csv_storage.py    # CSV writer and log manager
